@@ -132,17 +132,16 @@ The app is ready for screenshots, but the actual image files should be saved int
 
 ### Process 1: Ask Movies dashboard
 
-![Process 1 dashboard](screenshots/process1_dashboard.png)
+<img width="1907" height="915" alt="image" src="https://github.com/user-attachments/assets/899ad68a-d4e6-41b7-968b-ccc04839bd82" />
+
 
 ### Process 2: Migration prompt screen
 
-![Process 2 migration screen](screenshots/process2_migration.png)
+**<img width="1457" height="737" alt="image" src="https://github.com/user-attachments/assets/61826277-0f15-43ed-a176-3bad6a56fcaa" />
 
 ### TiDB migrated results
 
-![TiDB migrated results](screenshots/tidb_migrated_results.png)
-
-> Add the actual images to the `screenshots/` folder when you are ready to publish the project documentation.
+<img width="1572" height="496" alt="image" src="https://github.com/user-attachments/assets/f81e22eb-2d24-418e-9d3d-4a52362f4f5b" />
 
 ## Notes
 - The default MongoDB database used by the app is `sample_mflix`.
