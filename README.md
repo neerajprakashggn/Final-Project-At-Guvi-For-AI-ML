@@ -1,107 +1,67 @@
 # Project 1 — AI-Powered MongoDB Query System
 
-## What it does
-A Streamlit web app where you type questions in plain English
-1.Reads your MongoDB collection schemas (RAG context)
-2.Passes your question + schema to Groq
-3.Groq generates the correct PyMongo query
-4.The app runs the query and shows results in a table
+A Streamlit web application that allows users to query MongoDB using natural language.
 
-## One-time Setup
-
-### 1. Install Python packages
-```bash
-pip install -r requirements.txt
-```
-
-### 2. Get a FREE MongoDB Atlas account
-1. Go to https://www.mongodb.com/cloud/atlas
-2. Sign up for free (M0 free tier)
-3. Create a cluster → Load **Sample Dataset** (includes `sample_mflix`)
-4. Under **Database Access** → Add a user with read/write permissions
-5. Under **Network Access** → Add `0.0.0.0/0` (allow all IPs for local testing)
-6. Click **Connect** → **Drivers** → copy the URI  
-   It looks like: `mongodb+srv://<user>:<password>@cluster0.xxxxx.mongodb.net/`
-
-### 3. Get a Groq API Key
-1. Go to https://console.groq.com/keys
-2. Create an API key and copy it
-
-### 4. Configure environment variables
-Create or update `.env` in the project folder:
-```env
-MONGO_URI=your_mongodb_connection_string
-GROQ_API_KEY=your_groq_api_key
-GROQ_MODEL=qwen/qwen3.8-27b
-TIDB_HOST=your_tidb_host
-TIDB_PORT=4000
-TIDB_USER=your_tidb_user
-TIDB_PASSWORD=your_tidb_password
-TIDB_DATABASE=your_tidb_database
-```
+The application uses MongoDB schema information as context, sends the user’s question to Groq, generates a PyMongo query, executes the query, and displays the results in a table.
 
 ---
 
-## Run the App
-```bash
-streamlit run app.py
-```
-Then open `http://localhost:8501` in your browser (Opera is fine).
----
+## Features
 
-## How to Demo
-
-### Step 1 — Configure credentials
-- Set `MONGO_URI` and `GROQ_API_KEY` in `.env` before starting the app.
-
-### Step 2 — Try these sample prompts on the **Process1** tab
-
-| Prompt | Expected behaviour |
-|--------|--------------------|
-| Show top 10 movies with highest IMDb rating | Queries `movies` collection, sorts by `imdb.rating` |
-| How many movies were released after 2010? | Uses `count_documents` with a date filter |
-| List all movies in the Horror genre | Filters by `genres` field |
-| Who directed the movie Inception? | Returns director info |
-| Show movies with more than 1000 votes | Filters on `imdb.votes` |
-
-### Step 3 — Show follow-up conversation
-After asking about top-rated movies, follow up with:  
-> "Show only the ones released after 2000"
-
-The app remembers the last 6 turns of conversation.
+- Ask MongoDB questions in plain English
+- Automatically inspect MongoDB collection schemas
+- Use schema context for AI-powered query generation
+- Generate PyMongo queries with Groq
+- Execute read-only MongoDB queries
+- Display query results in a Streamlit table
+- Maintain conversation history for follow-up questions
+- Support the MongoDB Atlas `sample_mflix` dataset
+- Include MongoDB-to-TiDB/MySQL migration support
 
 ---
 
-## Architecture (for mentor questions)
+## How It Works
 
-User Prompt
-    │
-    ▼
-Streamlit UI (Process1 tab)
-    │
-    ▼
-RAG Context Builder ──► MongoDB Atlas (reads collection schemas)
-    │
-    ▼
-Google Gemini 1.5 Flash (generates PyMongo query)
-    │
-    ▼
-Query Executor (safe: read-only, capped at 50 rows)
-    │
-    ▼
-Results displayed as DataFrame in Streamlit
-```
+1. The application reads collection names, fields, and sample documents from MongoDB.
+2. The schema information is provided to the Groq language model as RAG context.
+3. Groq generates a PyMongo query based on the user’s question.
+4. The application validates and executes the generated query.
+5. The results are displayed in the Streamlit interface.
 
-## Key Technical Points (Mentor Q&A prep)
+---
 
-**Q: What is RAG in this project?**  
-A: RAG (Retrieval-Augmented Generation) means we retrieve the MongoDB schema/field names and pass them as context to Gemini. This way the AI "knows" the structure of our data before generating a query.
+## Technology Stack
 
-**Q: How is it "Agentic"?**  
-A: The AI decides which collection to query, what filters to apply, and how to sort/limit — all autonomously based on the user's natural language question.
+- Python
+- Streamlit
+- MongoDB Atlas
+- PyMongo
+- Groq API
+- Pandas
+- TiDB/MySQL
+- PyMySQL
+- Python Dotenv
 
-**Q: Why limit results to 50?**  
-A: To avoid overloading the UI and MongoDB connection with massive result sets.
+---
 
-**Q: What stops the AI from running destructive queries?**  
-A: The executor checks that only `find`, `aggregate`, `count_documents`, or `distinct` operations are present before running any code.
+## Requirements
+
+Before running the application, install:
+
+- Python 3.9 or newer
+- A MongoDB Atlas account
+- The MongoDB Atlas `sample_mflix` sample dataset
+- A Groq API key
+- TiDB or MySQL credentials for the migration feature
+
+---
+
+## Project Structure
+
+```text
+project-folder/
+├── app.py
+├── requirements.txt
+├── .env
+├── .gitignore
+└── README.md
